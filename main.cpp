@@ -11,7 +11,7 @@
 #include <assimp/postprocess.h>
 #include "Shader.h"
 #define STB_IMAGE_IMPLEMENTATION
-#include "../third_party/stb_image.h"
+#include "third_party/stb_image.h"
 #include <string>
 #include <cstdint>
 

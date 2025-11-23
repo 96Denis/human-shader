@@ -1,0 +1,16 @@
+# Visual Studio ignores
+.vs/
+Debug/
+Release/
+x64/
+*.obj
+*.pdb
+*.exe
+*.ilk
+*.user
+bin/
+obj/
+
+# Alte chestii
+*.log
+Thumbs.db

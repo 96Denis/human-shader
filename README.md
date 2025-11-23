@@ -8,7 +8,7 @@ Shader PBR de car paint aplicat pe un model uman (fost Golf 4).
 
 ## Cum rulezi
 1. Clonează repo-ul
-2. Deschide `ShaderGolf4.sln`
+2. Deschide `HumanShader.sln`
 3. Build → Run (F5)
 
 ## Comenzi

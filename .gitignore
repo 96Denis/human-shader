@@ -10,7 +10,5 @@ x64/
 *.user
 bin/
 obj/
-
-# Alte chestii
 *.log
 Thumbs.db

@@ -8,9 +8,9 @@ out vec3 FragPos;
 out vec3 Normal;
 out vec2 TexCoords;
 
-uniform mat4 uModel;       // <--- SCHIMBAT AICI
-uniform mat4 uView;        // <--- SCHIMBAT AICI
-uniform mat4 uProj;        // <--- SCHIMBAT AICI
+uniform mat4 uModel;       
+uniform mat4 uView;        
+uniform mat4 uProj;        
 
 void main()
 {

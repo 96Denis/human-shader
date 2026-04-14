@@ -19,7 +19,6 @@ void loadModel(const char* path);
 void createBuffers();
 GLuint loadCubemapFaces(const std::vector<std::string>& faces);
 
-// adjust these paths if you put files elsewhere
 const char* VERT_PATH = "shaders/car_vert.glsl";
 const char* FRAG_PATH = "shaders/car_frag.glsl";
 const char* MODEL_PATH = "assets/head.OBJ";
@@ -27,7 +26,7 @@ const char* MODEL_PATH = "assets/head.OBJ";
 float cameraDist = 4.0f;
 float cameraAzimuth = 0.0f;
 float cameraElevation = 0.0f;
-bool autoRotate = true;  // pornește cu rotație automată
+bool autoRotate = true; 
 
 Shader shader;
 GLuint envCubemap = 0;
@@ -49,31 +48,29 @@ void display() {
 
     shader.use();
 
-    // === MODEL + ROTAȚIE ===
+    // === MODEL + rotation ===
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::scale(model, glm::vec3(6.0f));
     model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0)); // întoarce fața spre cameră
 
-    // rotație automată (poate fi oprită cu SPAȚIU)
     if (autoRotate) {
         cameraAzimuth = (float)glutGet(GLUT_ELAPSED_TIME) / 80.0f;
     }
 
-    // === CAMERA LIBERĂ (WASD + mouse + săgeți + SPAȚIU pauză) ===
     float x = cameraDist * cos(glm::radians(cameraElevation)) * sin(glm::radians(cameraAzimuth));
     float y = cameraDist * sin(glm::radians(cameraElevation));
     float z = cameraDist * cos(glm::radians(cameraElevation)) * cos(glm::radians(cameraAzimuth));
 
     glm::mat4 view = glm::lookAt(
-        glm::vec3(x, y + 0.5f, z),      // poziția camerei
-        glm::vec3(0.0f, 0.5f, 0.0f),     // privește în centru
+        glm::vec3(x, y + 0.5f, z),      
+        glm::vec3(0.0f, 0.5f, 0.0f),    
         glm::vec3(0.0f, 1.0f, 0.0f)
     );
 
     glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)windowW / windowH, 0.1f, 100.0f);
     glm::mat3 normalMat = glm::transpose(glm::inverse(glm::mat3(model)));
 
-    // Trimite la shader
+    // sending to shader
     glUniformMatrix4fv(shader.getUniformLocation("uModel"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(shader.getUniformLocation("uView"), 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(shader.getUniformLocation("uProj"), 1, GL_FALSE, glm::value_ptr(proj));
@@ -82,7 +79,6 @@ void display() {
     glm::vec3 camPos(x, y + 0.5f, z);
     glUniform3fv(shader.getUniformLocation("uCameraPos"), 1, glm::value_ptr(camPos));
 
-    //  paint perfect
     glUniform3f(shader.getUniformLocation("uLightPos"), 8.0f, 10.0f, 8.0f);
     glUniform3f(shader.getUniformLocation("uLightColor"), 7.0f, 7.0f, 7.0f);
     glUniform3f(shader.getUniformLocation("uBaseColor"), 0.18f, 0.16f, 0.15f);
@@ -92,7 +88,7 @@ void display() {
     float t = (float)glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
     glUniform1f(shader.getUniformLocation("uTime"), t);
 
-    // Desenează modelul
+    // drawing model
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
@@ -101,8 +97,6 @@ void display() {
     glutPostRedisplay();
 }
 
-// ================================================================
-// 1. LOAD MODEL cu Assimp (funcțional pentru .obj)
 void loadModel(const char* path)
 {
     Assimp::Importer* importer = new Assimp::Importer();  // <--- pe heap
@@ -131,13 +125,6 @@ void loadModel(const char* path)
             Vertex v = {};
             v.pos = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
             v.normal = mesh->mNormals ? glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z) : glm::vec3(0, 1, 0);
-
-            // NOTE: Some imported meshes (or corrupt/odd exporters) expose a non-null
-            // mTextureCoords[0] pointer that is not safe to index. Dereferencing such
-            // pointers causes access violations in the loader. The safe and simple
-            // approach below avoids any direct indexing of mTextureCoords and uses a
-            // default UV. If you need real UVs, re-export the model with valid UVs
-            // or perform a stronger validation step for the UV pointer before reading.
             v.uv = glm::vec2(0.0f, 0.0f);
 
             vertices.push_back(v);
@@ -154,12 +141,11 @@ void loadModel(const char* path)
 
     std::cout << "FULL MODEL LOADED: " << scene->mNumMeshes << " meshes, "
         << vertices.size() << " vertices, " << indices.size() / 3 << " triangles\n";
-    importer->FreeScene();  // important!
-    delete importer;        // eliberează memoria
+    importer->FreeScene(); 
+    delete importer;       
 }
 
-// ================================================================
-// 2. CREATE BUFFERS (VAO/VBO/EBO)
+// creating BUFFERS (VAO/VBO/EBO)
 void createBuffers()
 {
     glGenVertexArrays(1, &VAO);
@@ -187,8 +173,7 @@ void createBuffers()
     glBindVertexArray(0);
 }
 
-// ================================================================
-// 3. LOAD CUBEMAP (6 imagini)
+// 3. loading CUBEMAP (6 pics)
 GLuint loadCubemapFaces(const std::vector<std::string>& faces)
 {
     GLuint textureID;
@@ -231,17 +216,17 @@ void initResources() {
 	createBuffers();
 
 
-    // Cubemap SUPER simplu și rapid – doar cer albastru + lumină (funcționează PERFECT pentru car paint)
+    // Cubemap
    // std::vector<std::string> faces = {
    //     "assets/envposx.jpg",   // right
    //     "assets/envnegx.jpg",   // left  
-   ///     "assets/envposy.jpg",   // top (cer)
+   ///     "assets/envposy.jpg",   // top 
    //     "assets/envnegy.jpg",   // bottom
     //    "assets/envposz.jpg",   // front
    //     "assets/envnegz.jpg"    // back
    // };
    // envCubemap = loadCubemapFaces(faces);
-    envCubemap = 0;   // important!
+    envCubemap = 0;   
 }
 
 void mouseMotion(int x, int y) {
@@ -256,7 +241,7 @@ void mouseMotion(int x, int y) {
 }
 
 void keyboard(unsigned char key, int x, int y) {
-    if (key == ' ') autoRotate = !autoRotate;  // SPAȚIU = pauză/pornește rotația
+    if (key == ' ') autoRotate = !autoRotate;  
     if (key == 'w') cameraDist -= 0.2f;
     if (key == 's') cameraDist += 0.2f;
     if (cameraDist < 1.0f) cameraDist = 1.0f;
@@ -280,15 +265,15 @@ int main(int argc, char** argv) {
 	GLenum err = glewInit(); if (err != GLEW_OK) { std::cerr << "GLEW init failed\n"; return -1; }
 	initResources();
 	glutDisplayFunc(display);
-    glutMotionFunc(mouseMotion);           // click + miști
+    glutMotionFunc(mouseMotion);          
     glutPassiveMotionFunc(mouseMotion);    
     glutMouseFunc([](int button, int state, int x, int y) {
         if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-            autoRotate = false;            // oprire rotatie automată când se apass click
+            autoRotate = false;            
         }
         });                               
-    glutKeyboardFunc(keyboard);       // W/S = zoom, SPAȚIU = pauză rotație
-    glutSpecialFunc(specialKeys);     // săgeți = mișcare cameră
+    glutKeyboardFunc(keyboard);       
+    glutSpecialFunc(specialKeys);    
 	glutMainLoop();
 	return 0;
 }

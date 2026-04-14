@@ -1,23 +1,23 @@
 # Human Body Shader
 
-Shader PBR de car paint aplicat pe un model uman (fost Golf 4).
+A rainbow shader applied to a humban body.
 
-## Cerințe
+## Requirements
 - Visual Studio 2022 + C++ workload
-- OpenGL + GLEW + GLUT + Assimp (toate în third_party sau instalate global)
+- OpenGL + GLEW + GLUT + Assimp (in third_party)
 
-## Cum rulezi
-1. Clonează repo-ul
-2. Deschide `HumanShader.sln`
+## How to run
+1. Clone the repo
+2. Open `HumanShader.sln`
 3. Build → Run (F5)
 
-## Comenzi
-- SPAȚIU = pauză rotație automată
-- Mouse click + drag = control cameră
+## Controls
+- SpaceBar = pause the auotmatic rotation of the body
+- Mouse click + drag = camera control
 - W/S = zoom
-- Săgeți = mișcare cameră
+- Arrows = move camera
 
 ## Cubemap
-Cele 6 fețe în `assets/` (posx.jpg, negx.jpg etc.) – schimbă-le cu ce vrei tu.
+6 sides in `assets/` (posx.jpg, negx.jpg etc.)
 
-Enjoy the metallic human!
+Enjoy the rainbow human!

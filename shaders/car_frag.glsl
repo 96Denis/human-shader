@@ -3,7 +3,7 @@ out vec4 FragColor;
 
 in vec3 FragPos;
 in vec3 Normal;
-in vec2 TexCoords;  // <--- ADAUGĂ ASTA SUS
+in vec2 TexCoords;
 
 uniform vec3 uCameraPos;
 uniform vec3 uLightPos;
@@ -44,10 +44,9 @@ void main() {
     vec3 specular = NDF * F * uLightColor * 2.0;
     vec3 diffuse = (1.0 - F) * (1.0 - uMetallic) * uBaseColor / PI * uLightColor;
 
-    // Clear coat + flake
     float clearCoat = uClearCoat * pow(1.0 - max(dot(V, N), 0.0), 5.0);
     vec3 color = (diffuse + specular) * max(dot(N, L), 0.0) + clearCoat * uLightColor * 2.0;
-    color += NDF * 0.5 * uLightColor;  // metallic flake
+    color += NDF * 0.5 * uLightColor; 
 
     FragColor = vec4(color, 1.0);
 }
